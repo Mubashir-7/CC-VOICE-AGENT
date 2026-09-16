@@ -2,8 +2,8 @@
   "name": "Patient Registration Agent",
   "firstMessage": "Thank you for calling! I'm here to help get you registered as a new patient. This will only take about two minutes. To get started, could I get your full name and date of birth?",
   "model": {
-    "provider": "groq",
-    "model": "llama3-70b-8192",
+    "provider": "google",
+    "model": "gemini-3.5-flash",
     "temperature": 0.4,
     "maxTokens": 1000,
     "messages": [
@@ -140,9 +140,9 @@
     "voiceId": "en-US-JennyNeural"
   },
   "transcriber": {
-    "provider": "google",
-    "model": "gemini-2.0-flash",
-    "language": "English"
+    "provider": "deepgram",
+    "model": "nova-2",
+    "language": "en-US"
   },
   "startSpeakingPlan": {
     "waitSeconds": 0.4
