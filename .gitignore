@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.Python
+venv/
+.venv/
+env/
+ENV/
+
+# Environment variables — NEVER commit this
+.env
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
