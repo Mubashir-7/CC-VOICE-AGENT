@@ -28,7 +28,7 @@ REST API (/patients — GET, POST, PUT, DELETE)
 ```
 
 - **Telephony/Voice layer:** Vapi — handles call answering, speech-to-text (Google Gemini), text-to-speech (Azure Neural), interruption handling, and turn-taking. The LLM drives the conversation and calls our API via defined tools.
-- **LLM:** Google Gemini 2.0 Flash via Vapi — fast, low-latency, free tier sufficient for conversational slot-filling.
+- **LLM:** Google Gemini 3.5 Flash via Vapi — fast, low-latency, free tier sufficient for conversational slot-filling.
 - **API layer:** FastAPI (Python) — all validation and persistence logic lives here, not in the agent.
 - **DB layer:** SQLite on a persistent Railway volume. Zero-ops, survives restarts, sufficient for assessment scope.
 
@@ -37,7 +37,7 @@ REST API (/patients — GET, POST, PUT, DELETE)
 | Layer | Choice | Why |
 |---|---|---|
 | Telephony + Voice AI | Vapi | Abstracts STT/TTS/telephony — build time goes into prompt quality and integration, not infra glue |
-| LLM | Gemini 2.0 Flash | Fast, low-latency, free tier; natively supported in Vapi |
+| LLM | Gemini 3.5 Flash | Fast, low-latency, free tier; natively supported in Vapi |
 | STT | Google (Gemini) via Vapi | Accurate, fast, free via Vapi |
 | TTS | Azure Neural (Jenny) via Vapi | Natural-sounding warm voice suitable for a medical office context |
 | Backend | FastAPI (Python) | Pydantic gives free server-side validation; auto-generates OpenAPI docs |
@@ -73,7 +73,7 @@ uvicorn api.main:app --reload
 ```
 
 ### 5. Deploy to Railway
-See `08_DEPLOYMENT_GUIDE.md` for full step-by-step Railway deploy instructions.
+Push the codebase to GitHub and connect it to a new project in Railway. Mount a persistent volume at `/app/data` for the SQLite database, and set `DATABASE_URL=sqlite:////app/data/patients.db` in your Railway variables.
 
 ### 6. Set up the Vapi assistant
 After deploying, update `API_BASE_URL` in `.env`, then run:
@@ -96,7 +96,7 @@ python scripts/seed_patients.py
 | `VAPI_PHONE_NUMBER_ID` | Yes | ID of provisioned Vapi phone number |
 | `VAPI_PHONE_NUMBER` | No | Actual dial-in number (display only) |
 | `GEMINI_API_KEY` | Yes | Google AI Studio API key |
-| `GEMINI_MODEL` | No | Default: `gemini-2.0-flash` |
+| `GEMINI_MODEL` | No | Default: `gemini-3.5-flash` |
 | `DATABASE_URL` | Yes | SQLite path (set after deploy) |
 | `API_BASE_URL` | Yes | Deployed URL (set after Railway deploy) |
 | `CORS_ORIGINS` | No | Allowed CORS origins (default: `*`) |
