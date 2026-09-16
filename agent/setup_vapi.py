@@ -65,6 +65,11 @@ def load_config() -> dict:
     raw = raw.replace("{{API_BASE_URL}}", API_BASE_URL)
 
     config = json.loads(raw)
+    
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    if groq_api_key and config.get("model", {}).get("provider") == "groq":
+        config["model"]["apiKey"] = groq_api_key
+
     print(f"✅ Loaded config: {CONFIG_FILE.name}")
     return config
 

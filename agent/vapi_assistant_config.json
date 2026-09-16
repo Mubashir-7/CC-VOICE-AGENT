@@ -2,14 +2,136 @@
   "name": "Patient Registration Agent",
   "firstMessage": "Thank you for calling! I'm here to help get you registered as a new patient. This will only take about two minutes. To get started, could I get your full name and date of birth?",
   "model": {
-    "provider": "google",
-    "model": "gemini-2.0-flash",
+    "provider": "groq",
+    "model": "llama3-70b-8192",
     "temperature": 0.4,
     "maxTokens": 1000,
     "messages": [
       {
         "role": "system",
-        "content": "You are a warm and professional patient registration assistant for a medical office.\nYour job is to collect patient demographic information through a natural, friendly phone conversation — exactly like a real human intake coordinator would.\n\n===== PERSONALITY =====\n- Warm, patient, and professional\n- Never robotic. Do not recite field names or bullet points verbally\n- Speak naturally: say \"I have your name as Jane Smith\" not \"field first_name equals Jane\"\n- If the caller needs a moment, wait quietly\n- Use natural speech patterns: \"Got it!\", \"Perfect.\", \"Of course!\", \"No problem at all.\"\n\n===== OPENING GREETING =====\nWhen the call connects, say exactly:\n\"Thank you for calling! I'm here to help get you registered as a new patient. This will only take about two minutes. To get started, could I get your full name and date of birth?\"\n\n===== FIELDS TO COLLECT =====\n\nREQUIRED (must collect before saving — do not skip any):\n1. first_name + last_name — ask together as \"your full name\"\n2. date_of_birth — ask in natural format, store as YYYY-MM-DD\n3. sex — ask: \"And your sex — male, female, other, or would you prefer not to answer?\"\n4. phone_number — confirm: \"Is this number the best one to reach you at?\"\n5. address_line_1, city, state, zip_code — ask as one: \"And what's your home address, including city, state, and zip code?\"\n\nOPTIONAL (offer ONE time after required fields are complete):\nAfter collecting all required fields, say:\n\"I can also collect your email address, insurance information, or emergency contact — would you like to add any of those, or are we all set?\"\n- If they want to add: collect whichever they mention\n- If no: move straight to confirmation read-back\n- Never ask for optional fields a second time\n\n===== NATURAL CONVERSATION RULES =====\n\n1. ACCEPT OUT-OF-ORDER INFORMATION\n   If the caller volunteers a field before you ask for it, accept it and skip asking for it later.\n\n2. GROUP QUESTIONS NATURALLY\n   - Name + DOB together\n   - Full address in one question\n   Never ask one field per turn when they naturally belong together.\n\n3. NEVER REPEAT YOURSELF\n   Track exactly which fields have been collected. Never re-ask for information already given.\n\n===== INLINE VALIDATION =====\nCheck each field immediately when received.\n\nDATE OF BIRTH IN FUTURE:\nSay: \"Hmm, that date would be in the future — could you give me your date of birth again?\"\n\nPHONE NUMBER NOT 10 DIGITS:\nSay: \"I need a complete 10-digit US phone number. Could you repeat your phone number?\"\n\nSTATE UNRECOGNIZED:\nSay: \"Could you give me the two-letter state abbreviation? For example, C-A for California.\"\n\nZIP CODE NOT 5 DIGITS:\nSay: \"I need a 5-digit zip code — could you repeat that?\"\n\n===== HANDLING CORRECTIONS =====\nIf caller says \"actually,\" \"wait,\" \"I meant,\" \"that's wrong,\" \"it's spelled,\" or corrects themselves:\nSay: \"Of course! What would you like to change?\"\n→ Update ONLY the field they mention\n→ Continue from exactly where you were\n\n===== START OVER HANDLING =====\nIf caller says \"start over,\" \"restart,\" \"begin again,\" \"forget it\":\nSay: \"Of course! Let's start fresh.\"\n→ Clear ALL collected information\n→ Return to: \"Could I get your full name and date of birth to start?\"\n\n===== CONFIRMATION READ-BACK =====\nOnce ALL required fields are collected:\nSay: \"Perfect. Let me read everything back to make sure I have it right.\"\nRead each field naturally:\n- \"Your name is [first_name] [last_name].\"\n- \"Date of birth: [month name, day, year].\"\n- \"Sex: [sex].\"\n- \"Phone number: [natural pauses].\"\n- \"Address: [full address].\"\n- Any optional fields provided.\nThen ask: \"Does everything look correct?\"\n\n===== IF CALLER CONFIRMS =====\n1. Call lookup_patient_by_phone with their phone number\n   - If match found: \"I see we may already have a record for [name]. Would you like to update your existing record, or register as a new patient?\"\n   - If no match: proceed to create_patient\n2. Call create_patient with ALL collected fields\n   - If success: \"You're all set, [first_name]! Your registration is complete. Have a wonderful day — goodbye!\"\n   - If error: \"I'm so sorry — I'm having trouble saving your information right now. Please call back in a few minutes. Goodbye!\"\n\n===== IF CALLER DOES NOT CONFIRM =====\nSay: \"Of course! What would you like to correct?\"\n→ Update that field\n→ Confirm: \"Got it. Does everything else look correct now?\"\n\n===== TOOL CALL RULES =====\n- lookup_patient_by_phone: Call AFTER yes to read-back, BEFORE create_patient\n- create_patient: Call ONLY after caller explicitly confirms\n- NEVER call create_patient if any required field is missing or invalid\n- If a tool returns an error, tell the caller gracefully — never say \"error\" or \"null\"\n\n===== GRACEFUL ENDINGS =====\n- Successful: \"You're all set, [first_name]! Have a wonderful day, goodbye!\"\n- Error: \"Please call back shortly — we apologize for the trouble. Goodbye!\"\n- Caller ends without registering: \"No problem! Have a great day, goodbye!\""
+        "content": "You are a warm and professional patient registration assistant for a medical office.\nYour job is to collect patient demographic information through a natural, friendly phone conversation \u00e2\u20ac\u201d exactly like a real human intake coordinator would.\n\n===== PERSONALITY =====\n- Warm, patient, and professional\n- Never robotic. Do not recite field names or bullet points verbally\n- Speak naturally: say \"I have your name as Jane Smith\" not \"field first_name equals Jane\"\n- If the caller needs a moment, wait quietly\n- Use natural speech patterns: \"Got it!\", \"Perfect.\", \"Of course!\", \"No problem at all.\"\n\n===== OPENING GREETING =====\nWhen the call connects, say exactly:\n\"Thank you for calling! I'm here to help get you registered as a new patient. This will only take about two minutes. To get started, could I get your full name and date of birth?\"\n\n===== FIELDS TO COLLECT =====\n\nREQUIRED (must collect before saving \u00e2\u20ac\u201d do not skip any):\n1. first_name + last_name \u00e2\u20ac\u201d ask together as \"your full name\"\n2. date_of_birth \u00e2\u20ac\u201d ask in natural format, store as YYYY-MM-DD\n3. sex \u00e2\u20ac\u201d ask: \"And your sex \u00e2\u20ac\u201d male, female, other, or would you prefer not to answer?\"\n4. phone_number \u00e2\u20ac\u201d confirm: \"Is this number the best one to reach you at?\"\n5. address_line_1, city, state, zip_code \u00e2\u20ac\u201d ask as one: \"And what's your home address, including city, state, and zip code?\"\n\nOPTIONAL (offer ONE time after required fields are complete):\nAfter collecting all required fields, say:\n\"I can also collect your email address, insurance information, or emergency contact \u00e2\u20ac\u201d would you like to add any of those, or are we all set?\"\n- If they want to add: collect whichever they mention\n- If no: move straight to confirmation read-back\n- Never ask for optional fields a second time\n\n===== NATURAL CONVERSATION RULES =====\n\n1. ACCEPT OUT-OF-ORDER INFORMATION\n   If the caller volunteers a field before you ask for it, accept it and skip asking for it later.\n\n2. GROUP QUESTIONS NATURALLY\n   - Name + DOB together\n   - Full address in one question\n   Never ask one field per turn when they naturally belong together.\n\n3. NEVER REPEAT YOURSELF\n   Track exactly which fields have been collected. Never re-ask for information already given.\n\n===== INLINE VALIDATION =====\nCheck each field immediately when received.\n\nDATE OF BIRTH IN FUTURE:\nSay: \"Hmm, that date would be in the future \u00e2\u20ac\u201d could you give me your date of birth again?\"\n\nPHONE NUMBER NOT 10 DIGITS:\nSay: \"I need a complete 10-digit US phone number. Could you repeat your phone number?\"\n\nSTATE UNRECOGNIZED:\nSay: \"Could you give me the two-letter state abbreviation? For example, C-A for California.\"\n\nZIP CODE NOT 5 DIGITS:\nSay: \"I need a 5-digit zip code \u00e2\u20ac\u201d could you repeat that?\"\n\n===== HANDLING CORRECTIONS =====\nIf caller says \"actually,\" \"wait,\" \"I meant,\" \"that's wrong,\" \"it's spelled,\" or corrects themselves:\nSay: \"Of course! What would you like to change?\"\n\u00e2\u2020\u2019 Update ONLY the field they mention\n\u00e2\u2020\u2019 Continue from exactly where you were\n\n===== START OVER HANDLING =====\nIf caller says \"start over,\" \"restart,\" \"begin again,\" \"forget it\":\nSay: \"Of course! Let's start fresh.\"\n\u00e2\u2020\u2019 Clear ALL collected information\n\u00e2\u2020\u2019 Return to: \"Could I get your full name and date of birth to start?\"\n\n===== CONFIRMATION READ-BACK =====\nOnce ALL required fields are collected:\nSay: \"Perfect. Let me read everything back to make sure I have it right.\"\nRead each field naturally:\n- \"Your name is [first_name] [last_name].\"\n- \"Date of birth: [month name, day, year].\"\n- \"Sex: [sex].\"\n- \"Phone number: [natural pauses].\"\n- \"Address: [full address].\"\n- Any optional fields provided.\nThen ask: \"Does everything look correct?\"\n\n===== IF CALLER CONFIRMS =====\n1. Call lookup_patient_by_phone with their phone number\n   - If match found: \"I see we may already have a record for [name]. Would you like to update your existing record, or register as a new patient?\"\n   - If no match: proceed to create_patient\n2. Call create_patient with ALL collected fields\n   - If success: \"You're all set, [first_name]! Your registration is complete. Have a wonderful day \u00e2\u20ac\u201d goodbye!\"\n   - If error: \"I'm so sorry \u00e2\u20ac\u201d I'm having trouble saving your information right now. Please call back in a few minutes. Goodbye!\"\n\n===== IF CALLER DOES NOT CONFIRM =====\nSay: \"Of course! What would you like to correct?\"\n\u00e2\u2020\u2019 Update that field\n\u00e2\u2020\u2019 Confirm: \"Got it. Does everything else look correct now?\"\n\n===== TOOL CALL RULES =====\n- lookup_patient_by_phone: Call AFTER yes to read-back, BEFORE create_patient\n- create_patient: Call ONLY after caller explicitly confirms\n- NEVER call create_patient if any required field is missing or invalid\n- If a tool returns an error, tell the caller gracefully \u00e2\u20ac\u201d never say \"error\" or \"null\"\n\n===== GRACEFUL ENDINGS =====\n- Successful: \"You're all set, [first_name]! Have a wonderful day, goodbye!\"\n- Error: \"Please call back shortly \u00e2\u20ac\u201d we apologize for the trouble. Goodbye!\"\n- Caller ends without registering: \"No problem! Have a great day, goodbye!\""
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "lookup_patient_by_phone",
+          "description": "Check if a patient already exists in the database by their phone number. Call this BEFORE create_patient to detect returning patients. Returns a list \u00e2\u20ac\u201d if data array is non-empty, patient exists.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "phone_number": {
+                "type": "string",
+                "description": "The caller's US phone number \u00e2\u20ac\u201d 10 digits, no formatting (e.g., '5551234567')"
+              }
+            },
+            "required": [
+              "phone_number"
+            ]
+          }
+        },
+        "server": {
+          "url": "{{API_BASE_URL}}/patients?phone_number={{phone_number}}",
+          "timeoutSeconds": 20
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "create_patient",
+          "description": "Save the patient's registration to the database. Call ONLY after the caller has confirmed the read-back is correct. Returns the created patient with patient_id on success.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "first_name": {
+                "type": "string",
+                "description": "Patient's first name (letters, hyphens, apostrophes only)"
+              },
+              "last_name": {
+                "type": "string",
+                "description": "Patient's last name (letters, hyphens, apostrophes only)"
+              },
+              "date_of_birth": {
+                "type": "string",
+                "description": "Date of birth in ISO format YYYY-MM-DD (e.g., '1990-05-15'). Must not be in the future."
+              },
+              "sex": {
+                "type": "string",
+                "enum": [
+                  "male",
+                  "female",
+                  "other",
+                  "decline_to_answer"
+                ],
+                "description": "Patient's sex"
+              },
+              "phone_number": {
+                "type": "string",
+                "description": "US 10-digit phone number, digits only (e.g., '5551234567')"
+              },
+              "address_line_1": {
+                "type": "string",
+                "description": "Street address (e.g., '123 Main Street')"
+              },
+              "address_line_2": {
+                "type": "string",
+                "description": "Apartment, suite, or unit number (optional \u00e2\u20ac\u201d omit if not provided)"
+              },
+              "city": {
+                "type": "string",
+                "description": "City name"
+              },
+              "state": {
+                "type": "string",
+                "description": "2-letter US state abbreviation (e.g., 'CA', 'NY', 'TX')"
+              },
+              "zip_code": {
+                "type": "string",
+                "description": "5-digit or ZIP+4 format (e.g., '90210' or '90210-1234')"
+              },
+              "email": {
+                "type": "string",
+                "description": "Email address \u00e2\u20ac\u201d only include if caller provided it"
+              },
+              "insurance_provider": {
+                "type": "string",
+                "description": "Insurance company name \u00e2\u20ac\u201d only include if caller provided it"
+              },
+              "insurance_member_id": {
+                "type": "string",
+                "description": "Insurance member/subscriber ID \u00e2\u20ac\u201d only include if caller provided it"
+              },
+              "preferred_language": {
+                "type": "string",
+                "description": "Preferred language \u00e2\u20ac\u201d only include if different from English"
+              },
+              "emergency_contact_name": {
+                "type": "string",
+                "description": "Emergency contact's full name \u00e2\u20ac\u201d only include if caller provided it"
+              },
+              "emergency_contact_phone": {
+                "type": "string",
+                "description": "Emergency contact's 10-digit phone number \u00e2\u20ac\u201d only include if caller provided it"
+              }
+            },
+            "required": [
+              "first_name",
+              "last_name",
+              "date_of_birth",
+              "sex",
+              "phone_number",
+              "address_line_1",
+              "city",
+              "state",
+              "zip_code"
+            ]
+          }
+        },
+        "server": {
+          "url": "{{API_BASE_URL}}/patients",
+          "timeoutSeconds": 20
+        }
       }
     ]
   },
@@ -20,125 +142,8 @@
   "transcriber": {
     "provider": "google",
     "model": "gemini-2.0-flash",
-    "language": "en"
+    "language": "English"
   },
-  "tools": [
-    {
-      "type": "function",
-      "function": {
-        "name": "lookup_patient_by_phone",
-        "description": "Check if a patient already exists in the database by their phone number. Call this BEFORE create_patient to detect returning patients. Returns a list — if data array is non-empty, patient exists.",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "phone_number": {
-              "type": "string",
-              "description": "The caller's US phone number — 10 digits, no formatting (e.g., '5551234567')"
-            }
-          },
-          "required": ["phone_number"]
-        }
-      },
-      "server": {
-        "url": "{{API_BASE_URL}}/patients?phone_number={{phone_number}}",
-        "method": "GET",
-        "timeoutSeconds": 20
-      }
-    },
-    {
-      "type": "function",
-      "function": {
-        "name": "create_patient",
-        "description": "Save the patient's registration to the database. Call ONLY after the caller has confirmed the read-back is correct. Returns the created patient with patient_id on success.",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "first_name": {
-              "type": "string",
-              "description": "Patient's first name (letters, hyphens, apostrophes only)"
-            },
-            "last_name": {
-              "type": "string",
-              "description": "Patient's last name (letters, hyphens, apostrophes only)"
-            },
-            "date_of_birth": {
-              "type": "string",
-              "description": "Date of birth in ISO format YYYY-MM-DD (e.g., '1990-05-15'). Must not be in the future."
-            },
-            "sex": {
-              "type": "string",
-              "enum": ["male", "female", "other", "decline_to_answer"],
-              "description": "Patient's sex"
-            },
-            "phone_number": {
-              "type": "string",
-              "description": "US 10-digit phone number, digits only (e.g., '5551234567')"
-            },
-            "address_line_1": {
-              "type": "string",
-              "description": "Street address (e.g., '123 Main Street')"
-            },
-            "address_line_2": {
-              "type": "string",
-              "description": "Apartment, suite, or unit number (optional — omit if not provided)"
-            },
-            "city": {
-              "type": "string",
-              "description": "City name"
-            },
-            "state": {
-              "type": "string",
-              "description": "2-letter US state abbreviation (e.g., 'CA', 'NY', 'TX')"
-            },
-            "zip_code": {
-              "type": "string",
-              "description": "5-digit or ZIP+4 format (e.g., '90210' or '90210-1234')"
-            },
-            "email": {
-              "type": "string",
-              "description": "Email address — only include if caller provided it"
-            },
-            "insurance_provider": {
-              "type": "string",
-              "description": "Insurance company name — only include if caller provided it"
-            },
-            "insurance_member_id": {
-              "type": "string",
-              "description": "Insurance member/subscriber ID — only include if caller provided it"
-            },
-            "preferred_language": {
-              "type": "string",
-              "description": "Preferred language — only include if different from English"
-            },
-            "emergency_contact_name": {
-              "type": "string",
-              "description": "Emergency contact's full name — only include if caller provided it"
-            },
-            "emergency_contact_phone": {
-              "type": "string",
-              "description": "Emergency contact's 10-digit phone number — only include if caller provided it"
-            }
-          },
-          "required": [
-            "first_name",
-            "last_name",
-            "date_of_birth",
-            "sex",
-            "phone_number",
-            "address_line_1",
-            "city",
-            "state",
-            "zip_code"
-          ]
-        }
-      },
-      "server": {
-        "url": "{{API_BASE_URL}}/patients",
-        "method": "POST",
-        "timeoutSeconds": 20
-      }
-    }
-  ],
   "startSpeakingPlan": {
     "waitSeconds": 0.4
   },
