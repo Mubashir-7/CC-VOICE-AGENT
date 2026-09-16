@@ -1,8 +1,10 @@
 # Voice AI Patient Registration Agent
 
-**Live phone number:** `+1 (385) 406-9126`
-**API base URL:** *(set after Railway deploy)*
-**API docs:** *(set after Railway deploy)*/docs
+### Submission Details
+* **Repository URL:** [https://github.com/Mubashir-7/CC-VOICE-AGENT](https://github.com/Mubashir-7/CC-VOICE-AGENT)
+* **Phone number to call:** `+1 (385) 406-9126`
+* **API base URL:** `https://web-production-167da8.up.railway.app` (Docs available at `/docs`)
+* **Testing Notes:** No credentials are required to test. You can call the phone number directly to register a patient, and view the registered records by navigating to `https://web-production-167da8.up.railway.app/docs` to use the interactive API explorer.
 
 ---
 
